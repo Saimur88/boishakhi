@@ -4,8 +4,10 @@ class StatsRow extends StatelessWidget {
   final WeatherModel weather;
   const StatsRow({super.key,required this.weather});
 
+
   @override
   Widget build(BuildContext context) {
+    final visibility = '${weather.visibility / 1000}';
     final scheme = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
@@ -16,7 +18,13 @@ class StatsRow extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [],
+        children: [
+          _statItem(context, Icons.air, '${weather.windSpeed} m/s', 'Wind',Colors.blueGrey),
+          _divider(scheme),
+          _statItem(context, Icons.water_drop_outlined, '${weather.humidity}%', 'Humidity',Colors.blue),
+          _divider(scheme),
+          _statItem(context, Icons.visibility, '${weather.visibility / 1000} km', 'Visibility',Colors.lightGreen),
+        ],
       ),
     );
   }
@@ -27,10 +35,10 @@ class StatsRow extends StatelessWidget {
       color: scheme.onSurface.withValues(alpha: 0.1),
     );
   }
-  Widget _statItem(BuildContext context, IconData icon, String value,String label){
+  Widget _statItem(BuildContext context, IconData icon, String value,String label, Color color){
     return Column(
       children: [
-        Icon(icon,size: 20,),
+        Icon(icon,size: 20,color: color,),
         const SizedBox(height: 8),
         Text(value,style: Theme.of(context).textTheme.titleMedium,),
         Text(label,style: Theme.of(context).textTheme.bodySmall,),

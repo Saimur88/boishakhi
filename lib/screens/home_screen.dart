@@ -1,3 +1,4 @@
+import 'package:boishakhi/widgets/sun_times_row.dart';
 import 'package:boishakhi/widgets/weather_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -48,6 +49,9 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 24),
           if(provider.weather != null)
           StatsRow(weather: provider.weather!),
+          const SizedBox(height: 24),
+          if(provider.weather != null)
+            SunTimesRow(weather: provider.weather!),
 
         ],
       ),
@@ -89,6 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
               if(city.isNotEmpty){
                 context.read<WeatherProvider>().fetchWeather(city);
                 Navigator.pop(context);
+                _controller.clear();
               }
             }, child: const Text('Search'))
           ],
