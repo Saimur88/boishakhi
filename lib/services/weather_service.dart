@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:boishakhi/models/forecast_model.dart';
 import 'package:boishakhi/models/weather_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -23,4 +23,21 @@ class WeatherService {
     }
 
   }
+
+  Future<List<ForecastModel>> getForecast(String city) async {
+    final url = Uri.parse(
+        '$_baseUrl/../forecast?q=$city&appid=${Config.apiKey}&units=metric&cnt=8'
+    );
+    final response = await http.get(url);
+    if(response.statusCode == 200){
+      final json = jsonDecode(response.body);
+      final List list = json['list'];
+      return list.map((item)=> ForecastModel.fromJson(item)).toList( );
+    }
+    else {
+      throw Exception('Forecast failed to load');
+    }
+
+  }
+
 }
