@@ -21,8 +21,6 @@ class SunTimesRow extends StatelessWidget {
         children: [
           _sunItem(
             context,
-            icon: Icons.wb_twighlight,
-            iconColor: AppColors.sunriseColor,
             time: _formatUnixTime(weather.sunrise),
             label: 'Sunrise',
           ),
@@ -33,8 +31,6 @@ class SunTimesRow extends StatelessWidget {
           ),
           _sunItem(
             context,
-            icon: Icons.nights_stay_outlined,
-            iconColor: AppColors.sunsetColor,
             time: _formatUnixTime(weather.sunset),
             label: 'Sunset',
           ),
@@ -45,17 +41,22 @@ class SunTimesRow extends StatelessWidget {
 
   Widget _sunItem(
     BuildContext context, {
-    required IconData icon,
-    required Color iconColor,
     required String time,
     required String label,
   }) {
-    return Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Icon(icon, size: 28, color: iconColor),
-        const SizedBox(height: 8),
-        Text(time, style: Theme.of(context).textTheme.titleMedium),
-        Text(label, style: Theme.of(context).textTheme.bodySmall),
+        Image.asset('assets/images/$label.png',height: 24, width: 24),
+        const SizedBox(height: 8,width: 10,),
+
+        Column(
+          children: [
+            Text(time, style: Theme.of(context).textTheme.titleMedium),
+            Text(label, style: Theme.of(context).textTheme.bodySmall),
+          ],
+        ),
+
       ],
     );
   }
