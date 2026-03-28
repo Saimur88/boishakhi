@@ -71,9 +71,8 @@ class ForecastRow extends StatelessWidget {
       ],
     );
   }
-  String _formatUnixTime(int unixTime) {
-    final dateTime = DateTime.fromMillisecondsSinceEpoch(unixTime * 1000);
-    final hour = dateTime.hour;
+  String _formatUnixTime(DateTime time) {
+    final hour = time.hour;
     final period = hour >= 12 ? 'PM' : 'AM';
     final hour12 = hour > 12
         ? hour - 12

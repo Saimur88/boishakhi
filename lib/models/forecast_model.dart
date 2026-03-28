@@ -1,5 +1,5 @@
   class ForecastModel {
-    final int time;
+    final DateTime time;
     final double temperature;
     final String weatherMain;
     final String icon;
@@ -14,7 +14,7 @@
   });
     factory ForecastModel.fromJson(Map<String, dynamic> json){
       return ForecastModel(
-          time: json['dt'] as int,
+          time: DateTime.fromMillisecondsSinceEpoch(json['dt'] * 1000).toLocal(),
           temperature: (json['main']['temp'] as num).toDouble(),
           weatherMain: json['weather'][0]['main'],
           rainChances: (json['pop'] as num).toDouble(),

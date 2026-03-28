@@ -1,4 +1,5 @@
 import 'package:boishakhi/widgets/sun_times_row.dart';
+import 'package:boishakhi/widgets/temperature_graph.dart';
 import 'package:boishakhi/widgets/weather_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -41,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildBody(BuildContext context, WeatherProvider provider) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [_buildHeader(context, provider), const SizedBox(height: 24),
@@ -56,6 +57,9 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 24),
           if(provider.weather != null)
           ForecastRow(forecast: provider.forecast!),
+            const SizedBox(height: 24),
+          if(provider.weather != null)
+          TemperatureGraph(forecast: provider.forecast!),
 
         ],
       ),
