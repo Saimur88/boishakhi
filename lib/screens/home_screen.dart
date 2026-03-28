@@ -39,7 +39,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         actions: [
-         IconButton(onPressed: (){}, icon: Image.asset('assets/images/menu.png',width: 20,))
+         Padding(
+           padding: const EdgeInsets.only(right: 8),
+           child: IconButton(onPressed: (){}, icon: Image.asset('assets/images/menu.png',width: 20,)),
+         )
         ],
       ),
       extendBodyBehindAppBar: true,
@@ -56,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildBody(BuildContext context, WeatherProvider provider) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [_buildHeader(context, provider), const SizedBox(height: 24),
@@ -84,14 +87,17 @@ class _HomeScreenState extends State<HomeScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Row(
-          children: [
-            Icon(Icons.location_on_outlined,size: 18,),
-            Text(
-              provider.weather?.cityName ?? 'Boishakhi'
-              ,style: Theme.of(context).textTheme.headlineMedium,
-            )
-          ],
+        Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Row(
+            children: [
+              Icon(Icons.location_on_outlined,size: 18,),
+              Text(
+                provider.weather?.cityName ?? 'Boishakhi'
+                ,style: Theme.of(context).textTheme.headlineMedium,
+              )
+            ],
+          ),
         ),
         IconButton(onPressed: ()=> _showSearchDialog(context), icon: Icon(Icons.search),)
       ],
