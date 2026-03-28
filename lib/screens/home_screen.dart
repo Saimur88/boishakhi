@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/weather_provider.dart';
 import '../widgets/stats_row.dart';
+import 'package:boishakhi/widgets/forecast_row.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -52,6 +53,9 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 24),
           if(provider.weather != null)
             SunTimesRow(weather: provider.weather!),
+          const SizedBox(height: 24),
+          if(provider.weather != null)
+          ForecastRow(forecast: provider.forecast!),
 
         ],
       ),
