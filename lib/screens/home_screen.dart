@@ -29,6 +29,20 @@ class _HomeScreenState extends State<HomeScreen> {
     final provider = context.watch<WeatherProvider>();
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Welcome to',style: TextStyle(fontSize: 12),),
+            const Text('Boishakhi',style: TextStyle(fontSize: 16),),
+          ],
+        ),
+        actions: [
+         IconButton(onPressed: (){}, icon: Image.asset('assets/images/menu.png',width: 20,))
+        ],
+      ),
+      extendBodyBehindAppBar: true,
       backgroundColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0.6),
       body: SafeArea(
         child: provider.isLoading
@@ -42,22 +56,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildBody(BuildContext context, WeatherProvider provider) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [_buildHeader(context, provider), const SizedBox(height: 24),
           if(provider.weather != null)
           WeatherCard(weather: provider.weather!),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
           if(provider.weather != null)
           StatsRow(weather: provider.weather!),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
           if(provider.weather != null)
             SunTimesRow(weather: provider.weather!),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
           if(provider.weather != null)
           ForecastRow(forecast: provider.forecast!),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
           if(provider.weather != null)
           TemperatureGraph(forecast: provider.forecast!),
 
@@ -70,12 +84,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        Row(
           children: [
-            Text('Welcome to,', style: Theme.of(context).textTheme.bodyMedium),
+            Icon(Icons.location_on_outlined,size: 18,),
             Text(
-              provider.weather?.cityName ?? 'Boishakhi',style: Theme.of(context).textTheme.headlineMedium,
+              provider.weather?.cityName ?? 'Boishakhi'
+              ,style: Theme.of(context).textTheme.headlineMedium,
             )
           ],
         ),

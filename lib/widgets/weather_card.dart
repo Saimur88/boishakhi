@@ -28,10 +28,16 @@ class WeatherCard extends StatelessWidget {
       return atmosphere.contains(main) ? 'Atmosphere' : main;
     }
 
+    String toSentenceCase(String text){
+      if (text.isEmpty) return text;
+      return text[0].toUpperCase() + text.substring(1).toLowerCase();
+    }
+
     final type = getWeatherType(weather.weatherMain);
 
     return Container(
       width: double.infinity,
+      height: 150,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: scheme.surface,
@@ -49,7 +55,7 @@ class WeatherCard extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                weather.weatherMain,
+                toSentenceCase(weather.description),
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 4),
