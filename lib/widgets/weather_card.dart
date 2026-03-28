@@ -8,6 +8,28 @@ class WeatherCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    bool isNight = weather.icon.endsWith('n');
+
+    String getWeatherType(String main){
+      const atmosphere = [
+        'Mist',
+        'Smoke',
+        'Haze',
+        'Dust',
+        'Fog',
+        'Sand',
+        'Ash',
+        'Squall',
+        'Tornado',
+      ];
+      if(isNight && (main == 'Clear' || main == 'Clouds')) {
+        return '${main}_Night';
+      }
+      return atmosphere.contains(main) ? 'Atmosphere' : main;
+    }
+
+    final type = getWeatherType(weather.weatherMain);
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
@@ -37,7 +59,12 @@ class WeatherCard extends StatelessWidget {
               ),
             ],
           ),
-          Image.network('https://openweathermap.org/img/wn/${weather.icon}@2x.png',width: 80,height: 80,)
+          Image.asset(
+            'assets/images/weather_icons/$type.png',
+            width: 80,
+            height: 50,
+            colorBlendMode: BlendMode.srcIn,
+          ),
         ],
       ),
     );

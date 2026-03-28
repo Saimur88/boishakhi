@@ -47,7 +47,7 @@ class SunTimesRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Image.asset('assets/images/$label.png', width: 50),
+        Image.asset('assets/images/SunTimes/$label.png', width: 50),
         const SizedBox(width: 10,),
 
         Column(
