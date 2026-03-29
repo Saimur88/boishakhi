@@ -32,11 +32,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text('Welcome to',style: TextStyle(fontSize: 12),),
-            const Text('Boishakhi',style: TextStyle(fontSize: 16),),
+            Text('Boishakhi - ',style: Theme.of(context).textTheme.titleMedium),
+            const Text('The voice of Sky',style: TextStyle(fontSize: 14),)
+
           ],
         ),
         actions: [
@@ -85,23 +86,33 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildHeader(BuildContext context, WeatherProvider provider) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(5.0),
+    return InkWell(
+      borderRadius: BorderRadius.circular(24),
+      splashColor: Theme.of(context).colorScheme.onSurface.withAlpha(50),
+      focusColor: null,
+
+      onTap: ()=> _showSearchDialog(context),
+      child: Ink(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface.withAlpha(120),
+              borderRadius: BorderRadius.circular(24)
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.location_on_outlined,size: 18,),
+              Icon(Icons.location_on_outlined,size: 24,),
               Text(
-                provider.weather?.cityName ?? 'Boishakhi'
+                provider.weather!.cityName
                 ,style: Theme.of(context).textTheme.headlineMedium,
-              )
+              ),
+              const SizedBox(width: 8),
+              Icon(Icons.keyboard_double_arrow_down_rounded,)
             ],
           ),
         ),
-        IconButton(onPressed: ()=> _showSearchDialog(context), icon: Icon(Icons.search),)
-      ],
+      ),
     );
   }
   void _showSearchDialog(BuildContext context){
