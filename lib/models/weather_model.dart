@@ -10,6 +10,7 @@ class WeatherModel {
   final double windSpeed;
   final DateTime timestamp = DateTime.now();
   final int visibility;
+  final double feelsLike;
 
   WeatherModel({
     required this.cityName,
@@ -22,6 +23,7 @@ class WeatherModel {
     required this.windSpeed,
     required this.icon,
     required this.visibility,
+    required this.feelsLike,
   });
 
   factory WeatherModel.fromJson(Map<String, dynamic> json) {
@@ -35,7 +37,8 @@ class WeatherModel {
       sunset: json['sys']['sunset'],
       humidity: (json['main']['humidity'] as num).toDouble(),
       windSpeed: (json['wind']['speed'] as num).toDouble(),
-      visibility: json['visibility'] as int
+      visibility: json['visibility'] as int,
+      feelsLike: (json['main']['feels_like'] as num).toDouble(),
     );
   }
 }

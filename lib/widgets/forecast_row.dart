@@ -57,7 +57,7 @@ class ForecastRow extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(time.toString(),style: Theme.of(context).textTheme.titleMedium,),
-        rainChances > 0 ? Text('${(rainChances * 100).toStringAsFixed(0)}%',style: Theme.of(context).textTheme.labelMedium,) : const SizedBox(height: 8,),
+        rainChances > 0 ? Text('${(rainChances * 100).toStringAsFixed(1)}%',style: Theme.of(context).textTheme.labelMedium,) : const SizedBox(height: 8,),
 
         Image.asset(
           rainChances > 0 ? _getRainChanceIcon(rainChances * 100) :

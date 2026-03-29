@@ -69,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
           WeatherCard(weather: provider.weather!),
           const SizedBox(height: 16),
           if(provider.weather != null)
-          StatsRow(weather: provider.weather!),
+          StatsRow(weather: provider.weather!,forecast: provider.forecast!,),
           const SizedBox(height: 16),
           if(provider.weather != null)
             SunTimesRow(weather: provider.weather!),

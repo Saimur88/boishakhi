@@ -1,8 +1,10 @@
+import 'package:boishakhi/models/forecast_model.dart';
 import 'package:boishakhi/models/weather_model.dart';
 import 'package:flutter/material.dart';
 class StatsRow extends StatelessWidget {
   final WeatherModel weather;
-  const StatsRow({super.key,required this.weather});
+  final List<ForecastModel> forecast;
+  const StatsRow({super.key,required this.weather,required this.forecast});
 
 
   @override
@@ -19,11 +21,13 @@ class StatsRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _statItem(context, Icons.air, '${weather.windSpeed} m/s', 'Wind',Colors.blueGrey),
+          _statItem(context, 'Temp', '${weather.feelsLike.toStringAsFixed(0)}°C', 'Feels Like'),
           _divider(scheme),
-          _statItem(context, Icons.water_drop_outlined, '${weather.humidity}%', 'Humidity',Colors.blue),
+          _statItem(context, 'Humidity', '${weather.humidity}%', 'Humidity'),
           _divider(scheme),
-          _statItem(context, Icons.visibility, '${weather.visibility / 1000} km', 'Visibility',Colors.lightGreen),
+          _statItem(context, 'Drizzle', '${(forecast[0].rainChances * 100).toStringAsFixed(1)}%', 'Rain Chance'),
+          _divider(scheme),
+          _statItem(context, 'Wind', '${weather.windSpeed} m/s', 'Wind'),
         ],
       ),
     );
@@ -35,10 +39,10 @@ class StatsRow extends StatelessWidget {
       color: scheme.onSurface.withValues(alpha: 0.1),
     );
   }
-  Widget _statItem(BuildContext context, IconData icon, String value,String label, Color color){
+  Widget _statItem(BuildContext context, String image, String value,String label){
     return Column(
       children: [
-        Icon(icon,size: 20,color: color,),
+        Image.asset('assets/images/weather_icons/$image.png', width: 24,),
         const SizedBox(height: 8),
         Text(value,style: Theme.of(context).textTheme.titleMedium,),
         Text(label,style: Theme.of(context).textTheme.bodySmall,),
