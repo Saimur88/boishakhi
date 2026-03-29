@@ -1,3 +1,4 @@
+import 'package:boishakhi/widgets/search_sheet.dart';
 import 'package:boishakhi/widgets/sun_times_row.dart';
 import 'package:boishakhi/widgets/temperature_graph.dart';
 import 'package:boishakhi/widgets/weather_card.dart';
@@ -104,28 +105,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
   void _showSearchDialog(BuildContext context){
-    showDialog(context: context,
-        builder: (_) => AlertDialog(
-          title: const Text('Search City'),
-          content: TextField(
-            controller: _controller,
-            decoration: InputDecoration(
-                hintText: 'e.g. Dhaka'),
-            autofocus: true,
-          ),
-          actions: [
-            TextButton(onPressed: () => Navigator.pop(context),
-                child: Text('Cancel')),
-            TextButton(onPressed: (){
-              final city =_controller.text.trim();
-              if(city.isNotEmpty){
-                context.read<WeatherProvider>().fetchWeather(city);
-                Navigator.pop(context);
-                _controller.clear();
-              }
-            }, child: const Text('Search'))
-          ],
-        ));
+    showModalBottomSheet(
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        context: context,
+        builder: (_) => const SearchSheet());
 
   }
 }
