@@ -33,7 +33,10 @@ class WeatherProvider extends ChangeNotifier {
       final city = await _locationService.getCurrentCity();
       if(city != null){
         _weather = await _service.getWeatherByCity(city);
-        _forecast = await _service.getForecast(city);
+        _forecast = await _service.getForecast(
+          _weather!.lat,
+          _weather!.lon,
+        );
       }
       else{
         _errorMessage =  'Location permission denied';
@@ -53,7 +56,7 @@ Future<void> fetchWeather(String city) async {
   notifyListeners();
   try{
     _weather = await _service.getWeatherByCity(city);
-    _forecast = await _service.getForecast(city);
+    _forecast = await _service.getForecast(_weather!.lat, _weather!.lon);
   }catch(e){
     _errorMessage = e.toString();
   }finally{

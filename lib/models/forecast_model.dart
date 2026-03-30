@@ -1,24 +1,28 @@
   class ForecastModel {
     final DateTime time;
     final double temperature;
-    final String weatherMain;
-    final String icon;
+    final int weatherCode;
     final double rainChances;
 
     ForecastModel({
       required this.time,
       required this.temperature,
-      required this.weatherMain,
-      required this.icon,
+      required this.weatherCode,
       required this.rainChances,
   });
-    factory ForecastModel.fromJson(Map<String, dynamic> json){
-      return ForecastModel(
-          time: DateTime.fromMillisecondsSinceEpoch(json['dt'] * 1000).toLocal(),
-          temperature: (json['main']['temp'] as num).toDouble(),
-          weatherMain: json['weather'][0]['main'],
-          rainChances: (json['pop'] as num).toDouble(),
-          icon: json['weather'][0]['icon'],
-      );
+    static List<ForecastModel> fromHourlyJson (Map<String, dynamic> json){
+      final hourly = json['hourly'];
+      final times = hourly['time'] as List;
+      final temps = hourly['temperature_2m'] as List;
+      final codes = hourly['weather_code'] as List;
+      final rain = hourly['precipitation_probability'] as List;
+      return List.generate(times.length, (i){
+        return ForecastModel(
+            time: DateTime.parse(times[i]),
+            temperature: (temps[i] as num).toDouble(),
+            weatherCode: codes[i] as int,
+            rainChances: (rain[i] as num).toDouble() / 100,
+        );
+      });
     }
   }

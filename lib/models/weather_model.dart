@@ -1,16 +1,18 @@
 class WeatherModel {
   final String cityName;
   final double temperature;
-  final String icon;
+  final int weatherCode;
   final String weatherMain;
   final String description;
-  final int sunrise;
-  final int sunset;
+  final String sunrise;
+  final String sunset;
   final double humidity;
   final double windSpeed;
-  final DateTime timestamp = DateTime.now();
-  final int visibility;
+  final DateTime timestamp;
+  final double visibility;
   final double feelsLike;
+  final double lat;
+  final double lon;
 
   WeatherModel({
     required this.cityName,
@@ -21,24 +23,44 @@ class WeatherModel {
     required this.sunset,
     required this.humidity,
     required this.windSpeed,
-    required this.icon,
+    required this.weatherCode,
     required this.visibility,
     required this.feelsLike,
+    required this.timestamp,
+    required this.lat,
+    required this.lon,
   });
 
-  factory WeatherModel.fromJson(Map<String, dynamic> json) {
+  factory WeatherModel.fromJson(Map<String, dynamic> json, String cityName) {
+    final current = json['current'];
+    final daily = json['daily'];
+
     return WeatherModel(
-      cityName: json['name'],
-      temperature: (json['main']['temp'] as num).toDouble(),
-      icon: json['weather'][0]['icon'],
-      weatherMain: json['weather'][0]['main'],
-      description: json['weather'][0]['description'],
-      sunrise: json['sys']['sunrise'],
-      sunset: json['sys']['sunset'],
-      humidity: (json['main']['humidity'] as num).toDouble(),
-      windSpeed: (json['wind']['speed'] as num).toDouble(),
-      visibility: json['visibility'] as int,
-      feelsLike: (json['main']['feels_like'] as num).toDouble(),
+      cityName: cityName,
+      temperature: (current['temperature_2m'] as num).toDouble(),
+      weatherCode: current['weather_code'] as int,
+      weatherMain: _getWeatherMain(current['weather_code'] as int),
+      description: _getWeatherMain(current['weather_code'] as int),
+      sunrise: daily['sunrise'][0] as String,
+      sunset: daily['sunset'][0] as String,
+      humidity: (current['relative_humidity_2m'] as num).toDouble(),
+      windSpeed: (current['wind_speed_10m'] as num).toDouble(),
+      visibility: (current['visibility'] as num).toDouble(),
+      feelsLike: (current['apparent_temperature']as num).toDouble(),
+      timestamp: DateTime.now(),
+      lat: (json['latitude'] as num).toDouble(),
+      lon: (json['longitude'] as num).toDouble(),
     );
+  }
+  static String _getWeatherMain(int code){
+    if (code == 0) return 'Clear';
+    if (code <= 2) return 'Partly Cloudy';
+    if (code == 3) return 'Cloudy';
+    if (code <= 48) return 'Fog';
+    if (code <= 55) return 'Drizzle';
+    if (code <= 65) return 'Rain';
+    if (code <= 75) return 'Snow';
+    if (code <= 82) return 'Rain';
+    return 'Thunderstorm';
   }
 }
