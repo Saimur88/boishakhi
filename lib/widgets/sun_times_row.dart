@@ -1,4 +1,3 @@
-import 'package:boishakhi/app/theme/app_colors.dart';
 import 'package:boishakhi/models/weather_model.dart';
 import 'package:flutter/material.dart';
 
@@ -61,10 +60,10 @@ class SunTimesRow extends StatelessWidget {
     );
   }
 
-  String _formatUnixTime(int unixTime) {
-    final dateTime = DateTime.fromMillisecondsSinceEpoch(unixTime * 1000);
-    final hour = dateTime.hour;
-    final minute = dateTime.minute.toString().padLeft(2, '0');
+  String _formatUnixTime(String isoTime) {
+    final time = DateTime.parse(isoTime);
+    final hour = time.hour;
+    final minute = time.minute.toString().padLeft(2, '0');
     final period = hour >= 12 ? 'PM' : 'AM';
     final hour12 = hour > 12
         ? hour - 12

@@ -44,7 +44,7 @@ class WeatherService {
     final url = Uri.parse(
       '$_baseUrl?latitude=$lat&longitude=$lon'
           '&current=temperature_2m,relative_humidity_2m,apparent_temperature,'
-          'weather_code,wind_speed_10m,visibility'
+          'weather_code,wind_speed_10m,visibility,precipitation'
           '&daily=sunrise,sunset'
           '&timezone=auto',
     );

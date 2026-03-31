@@ -2,7 +2,7 @@
     final DateTime time;
     final double temperature;
     final int weatherCode;
-    final double rainChances;
+    final int rainChances;
 
     ForecastModel({
       required this.time,
@@ -21,7 +21,7 @@
             time: DateTime.parse(times[i]),
             temperature: (temps[i] as num).toDouble(),
             weatherCode: codes[i] as int,
-            rainChances: (rain[i] as num).toDouble() / 100,
+            rainChances: rain[i] as int,
         );
       });
     }

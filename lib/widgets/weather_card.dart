@@ -8,24 +8,17 @@ class WeatherCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    bool isNight = weather.icon.endsWith('n');
+    bool isNight = weather.timestamp.hour < 6 || weather.timestamp.hour >= 18;
 
     String getWeatherType(String main){
-      const atmosphere = [
-        'Mist',
-        'Smoke',
-        'Haze',
-        'Dust',
-        'Fog',
-        'Sand',
-        'Ash',
-        'Squall',
-        'Tornado',
-      ];
+
       if(isNight && (main == 'Clear' || main == 'Clouds')) {
-        return '${main}_Night';
+        return main == 'Clear' ? 'Clear_Night' : 'Clouds_Night' ;
       }
-      return atmosphere.contains(main) ? 'Atmosphere' : main;
+      if(main == 'Partly Cloudy') return 'Partly_Cloudy';
+      if(main == 'Cloudy') return 'Clouds';
+      if(main == 'fog') return 'Atmosphere';
+      return main;
     }
 
     String toSentenceCase(String text){

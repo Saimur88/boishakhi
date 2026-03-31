@@ -7,23 +7,19 @@ class ForecastRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    String getWeatherType(String main, String icon){
-      bool isNight = icon.endsWith('n');
-      const atmosphere = [
-        'Mist',
-        'Smoke',
-        'Haze',
-        'Dust',
-        'Fog',
-        'Sand',
-        'Ash',
-        'Squall',
-        'Tornado',
-      ];
-      if(isNight && (main == 'Clear' || main == 'Clouds')) {
-        return '${main}_Night';
-      }
-      return atmosphere.contains(main) ? 'Atmosphere' : main;
+
+    String getWeatherType(int code, DateTime time){
+      bool isNight = time.hour < 6 || time.hour >= 18;
+
+      if (code == 0) return isNight ? 'Clear_Night' : 'Clear';
+      if (code <= 2) return isNight ? 'Clouds_Night' : 'Partly_Cloudy';
+      if (code == 3) return 'Clouds';
+      if (code <= 48) return 'Atmosphere';
+      if (code <= 55) return 'Drizzle';
+      if (code <= 65) return 'Rain';
+      if (code <= 75) return 'Snow';
+      if (code <= 82) return 'Rain';
+      return 'Thunderstorm';
     }
 
 
@@ -36,7 +32,7 @@ class ForecastRow extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index){
           final item = forecast[index];
-          final type = getWeatherType(item.weatherMain, item.icon);
+          final type = getWeatherType(item.weatherCode, item.time);
           return Padding(
             padding: const EdgeInsets.all(4.0),
             child: Container(
@@ -46,21 +42,24 @@ class ForecastRow extends StatelessWidget {
                 color: scheme.surface,
                 borderRadius: BorderRadius.circular(24),
               ),
-              child: _forecastItem(context, type, forecast[index].icon, _formatUnixTime(forecast[index].time), forecast[index].rainChances, forecast[index].temperature),
+              child: _forecastItem(context, type, _formatUnixTime(forecast[index].time), forecast[index].rainChances, forecast[index].temperature),
             ),
           );
           }),
     );
   }
-  Widget _forecastItem(BuildContext context, String type, String icon, String time,double rainChances,double temp){
+  Widget _forecastItem(BuildContext context, String type, String time,int rainChances,double temp){
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(time.toString(),style: Theme.of(context).textTheme.titleMedium,),
-        rainChances > 0 ? Text('${(rainChances * 100).toStringAsFixed(1)}%',style: Theme.of(context).textTheme.labelMedium,) : const SizedBox(height: 8,),
+        rainChances >= 20 ? Text('$rainChances %',style: Theme.of(context).textTheme.labelMedium,) : type == 'Rain' ? Text('Possible Rain',style: TextStyle(
+          fontSize: 9,
+          fontWeight: FontWeight.w800
+        )) : const SizedBox(height: 8,),
 
         Image.asset(
-          rainChances > 0 ? _getRainChanceIcon(rainChances * 100) :
+          rainChances >= 20 ? _getRainChanceIcon(rainChances) :
           'assets/images/weather_icons/$type.png',
           width: 20,
           height: 20,
@@ -81,14 +80,13 @@ class ForecastRow extends StatelessWidget {
         : hour;
     return '$hour12 $period';
   }
-  String _getRainChanceIcon(double rainChances){
-    if(rainChances < 50){
-      return 'assets/images/weather_icons/Drizzle.png';
-    }
-    else if (rainChances >=50 && rainChances < 70){
+  String _getRainChanceIcon(int rainChances){
+    if(rainChances >=50 && rainChances <= 70){
       return 'assets/images/weather_icons/Rain.png';
     }
-    else{
+    else if (rainChances >= 20 && rainChances <= 50){
+      return 'assets/images/weather_icons/Drizzle.png';
+    } else{
       return 'assets/images/weather_icons/Thunderstorm.png';
     }
   }

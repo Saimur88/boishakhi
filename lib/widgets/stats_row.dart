@@ -25,7 +25,7 @@ class StatsRow extends StatelessWidget {
           _divider(scheme),
           _statItem(context, 'Humidity', '${weather.humidity}%', 'Humidity'),
           _divider(scheme),
-          _statItem(context, 'Drizzle', '${(forecast[0].rainChances * 100).toStringAsFixed(1)}%', 'Rain Chance'),
+          _statItem(context, 'Drizzle', '${forecast[0].rainChances.toStringAsFixed(1)}%', 'Rain Chance'),
           _divider(scheme),
           Column(
             children: [
