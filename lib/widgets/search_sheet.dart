@@ -70,24 +70,10 @@ class _SearchSheetState extends State<SearchSheet> {
               borderRadius: BorderRadius.circular(2),
             ),
           ),
-          const SizedBox(height: 16),
           //Title
           Text(
             'Search Location',
             style: Theme.of(context).textTheme.titleMedium,
-          ),
-          const SizedBox(height: 16),
-          //Gps button
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton.icon(
-              onPressed: () {
-                context.read<WeatherProvider>().fetchWeatherByLocation();
-                Navigator.pop(context);
-              },
-              icon: const Icon(Icons.my_location),
-              label: const Text('use current location'),
-            ),
           ),
           const SizedBox(height: 16),
 
@@ -97,19 +83,46 @@ class _SearchSheetState extends State<SearchSheet> {
             autofocus: true,
             onChanged: _onSearchChanged,
             decoration: InputDecoration(
-              hintText: 'Search city...',
+              hintText: 'Search By City...',
               prefixIcon: const Icon(Icons.search),
               suffixIcon: _isSearcing
                   ? const Padding(
-                      padding: EdgeInsets.all(12),
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
+                padding: EdgeInsets.all(12),
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
                   : null,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
             ),
           ),
+          const SizedBox(height: 16),
+
+          //Gps button
+          SizedBox(
+            width: double.infinity,
+            child: InkWell(
+              onTap: (){
+                context.read<WeatherProvider>().fetchWeatherByLocation();
+                Navigator.pop(context);
+              },
+              child: Row(
+                children: [
+                  Image.asset('assets/images/navigation.png', width: 20,color: scheme.onSurface,),
+                  const SizedBox(width: 16),
+                  Text(
+                    'Use Current Location',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+
+                ],
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+
           const SizedBox(height: 8),
 
           //Suggestions

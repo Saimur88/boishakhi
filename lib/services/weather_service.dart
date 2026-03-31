@@ -41,14 +41,14 @@ class WeatherService {
 
 
   Future<WeatherModel> getWeatherByCoordinates(double lat, double lon, String cityName) async {
-    final url = Uri.parse(
+    final omUrl = Uri.parse(
       '$_baseUrl?latitude=$lat&longitude=$lon'
           '&current=temperature_2m,relative_humidity_2m,apparent_temperature,'
           'weather_code,wind_speed_10m,visibility,precipitation'
           '&daily=sunrise,sunset'
           '&timezone=auto',
     );
-    final response = await http.get(url);
+    final response = await http.get(omUrl);
     if(response.statusCode == 200){
       final json = jsonDecode(response.body);
       return WeatherModel.fromJson(json, cityName);

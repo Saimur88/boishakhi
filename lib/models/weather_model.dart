@@ -31,9 +31,22 @@ class WeatherModel {
     required this.lon,
   });
 
+  static String _formatTime(DateTime time) {
+    final hour = time.hour;
+    final minute = time.minute.toString().padLeft(2, '0');
+    final period = hour >= 12 ? 'PM' : 'AM';
+    final hour12 = hour > 12
+        ? hour - 12
+        : hour == 0
+        ? 12
+        : hour;
+    return '$hour12:$minute$period';
+  }
+
   factory WeatherModel.fromJson(Map<String, dynamic> json, String cityName) {
     final current = json['current'];
     final daily = json['daily'];
+
 
     return WeatherModel(
       cityName: cityName,
@@ -41,8 +54,8 @@ class WeatherModel {
       weatherCode: current['weather_code'] as int,
       weatherMain: _getWeatherMain(current['weather_code'] as int),
       description: _getWeatherMain(current['weather_code'] as int),
-      sunrise: daily['sunrise'][0] as String,
-      sunset: daily['sunset'][0] as String,
+      sunrise: _formatTime(DateTime.parse(daily['sunrise'][0])),
+      sunset: _formatTime(DateTime.parse(daily['sunset'][0])),
       humidity: (current['relative_humidity_2m'] as num).toDouble(),
       windSpeed: (current['wind_speed_10m'] as num).toDouble(),
       visibility: (current['visibility'] as num).toDouble(),

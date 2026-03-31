@@ -20,7 +20,7 @@ class SunTimesRow extends StatelessWidget {
         children: [
           _sunItem(
             context,
-            time: _formatUnixTime(weather.sunrise),
+            time: weather.sunrise,
             label: 'Sunrise',
           ),
           Container(
@@ -30,7 +30,7 @@ class SunTimesRow extends StatelessWidget {
           ),
           _sunItem(
             context,
-            time: _formatUnixTime(weather.sunset),
+            time: weather.sunset,
             label: 'Sunset',
           ),
         ],
@@ -58,18 +58,5 @@ class SunTimesRow extends StatelessWidget {
 
       ],
     );
-  }
-
-  String _formatUnixTime(String isoTime) {
-    final time = DateTime.parse(isoTime);
-    final hour = time.hour;
-    final minute = time.minute.toString().padLeft(2, '0');
-    final period = hour >= 12 ? 'PM' : 'AM';
-    final hour12 = hour > 12
-        ? hour - 12
-        : hour == 0
-        ? 12
-        : hour;
-    return '$hour12:$minute$period';
   }
 }
