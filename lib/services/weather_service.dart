@@ -85,7 +85,7 @@ class WeatherService {
     final url = Uri.parse(
       '$_baseUrl?latitude=$lat&longitude=$lon'
           '&hourly=temperature_2m,weather_code,precipitation_probability'
-          '&timezone=auto&forecast_days=1',
+          '&timezone=auto&forecast_days=2',
     );
     final response = await http.get(url);
     if (response.statusCode == 200) {

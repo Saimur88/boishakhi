@@ -49,6 +49,7 @@ class ForecastRow extends StatelessWidget {
     );
   }
   Widget _forecastItem(BuildContext context, String type, String time,int rainChances,double temp){
+    print(time);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -71,6 +72,7 @@ class ForecastRow extends StatelessWidget {
     );
   }
   String _formatUnixTime(DateTime time) {
+    print(time);
     final hour = time.hour;
     final period = hour >= 12 ? 'PM' : 'AM';
     final hour12 = hour > 12
