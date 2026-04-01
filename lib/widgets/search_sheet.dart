@@ -13,7 +13,7 @@ class SearchSheet extends StatefulWidget {
 class _SearchSheetState extends State<SearchSheet> {
   final TextEditingController _controller = TextEditingController();
   final WeatherService _service = WeatherService();
-  List<String> _suggestions = [];
+  List<CityData> _suggestions = [];
   bool _isSearcing = false;
 
   @override
@@ -32,16 +32,15 @@ class _SearchSheetState extends State<SearchSheet> {
     setState(() {
       _isSearcing = true;
     });
-    final results = await _service.getCitySuggestions(query);
+    final results = await _service.getCitySuggestionsWithCoords(query);
     setState(() {
       _suggestions = results;
       _isSearcing = false;
     });
   }
 
-  void _selecCity(String city, BuildContext context) {
-    final cityName = city.split(',')[0].trim();
-    context.read<WeatherProvider>().fetchWeather(cityName);
+  void _selecCity(CityData city, BuildContext context) {
+    context.read<WeatherProvider>().fetchWeatherWithCoordinates(city.lat,city.lon,city.name);
     Navigator.pop(context);
   }
 
@@ -133,7 +132,7 @@ class _SearchSheetState extends State<SearchSheet> {
               itemBuilder: (context, index) {
                 return ListTile(
                   leading: const Icon(Icons.location_on_outlined),
-                  title: Text(_suggestions[index]),
+                  title: Text(_suggestions[index].name),
                   onTap: () => _selecCity(_suggestions[index], context),
                 );
               },

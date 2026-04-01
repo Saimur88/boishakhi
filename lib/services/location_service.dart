@@ -2,7 +2,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 class LocationService {
- Future<String?> getCurrentCity() async {
+ Future<Map<String, dynamic>?> getCurrentLocationWithCoords() async {
    LocationPermission permission = await Geolocator.checkPermission();
 
    if(permission == LocationPermission.denied){
@@ -22,6 +22,11 @@ class LocationService {
    );
    if(placemarks.isEmpty) return null;
    final place = placemarks.first;
-   return place.locality ?? place.administrativeArea;
+   final cityName =place.locality ?? place.administrativeArea ?? 'Unknown';
+   return {
+     'name': cityName,
+     'lat': position.latitude,
+     'lon': position.longitude,
+   };
  }
 }

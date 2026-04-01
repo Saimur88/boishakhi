@@ -5,9 +5,21 @@ import 'package:http/http.dart' as http;
 
 import '../config.dart';
 
+class CityData{
+  final String name;
+  final double lat;
+  final double lon;
+  CityData({
+    required this.name,
+    required this.lat,
+    required this.lon,
+});
+}
+
 class WeatherService {
   static const _baseUrl = 'https://api.open-meteo.com/v1/forecast';
   static const _geoUrl = 'https://geocoding-api.open-meteo.com/v1/search';
+
 
   Future<WeatherModel> getWeatherByCity(String city) async {
 
@@ -23,7 +35,7 @@ class WeatherService {
 
   Future<Map<String, dynamic>?> _getCityCoordinates(String city) async {
     final url = Uri.parse(
-        '$_geoUrl?name=$city&count=1&language=en'
+        '$_geoUrl?name=$city&count=10&language=en&country_code=BD',
     );
     final response = await http.get(url);
     if(response.statusCode == 200){
@@ -58,8 +70,7 @@ class WeatherService {
   }
 
 
-
-  Future<List<String>> getCitySuggestions(String query) async {
+  Future<List<CityData>> getCitySuggestionsWithCoords(String query) async {
     if (query.isEmpty) return [];
 
     final url = Uri.parse(
@@ -72,10 +83,19 @@ class WeatherService {
       return data.map((item) {
         final city = item['name'] as String;
         final country = item['country'] as String;
+        final lat = item['lat'] as double;
+        final lon = item['lon'] as double;
         final state = item['state'] as String? ?? '';
-        return state.isNotEmpty
-            ? '$city, $state $country'
+
+        final displayName = state.isNotEmpty
+            ? '$city, $state, $country'
             : '$city, $country';
+
+        return CityData(
+          name: displayName,
+          lat: lat,
+          lon: lon,
+        );
       }).toList();
     }
     return [];
@@ -95,6 +115,8 @@ class WeatherService {
       throw Exception('Forecast failed to load');
     }
   }
+
+
 
 
 }

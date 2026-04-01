@@ -30,12 +30,16 @@ class WeatherProvider extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
     try {
-      final city = await _locationService.getCurrentCity();
-      if(city != null){
-        _weather = await _service.getWeatherByCity(city);
+      final location = await _locationService.getCurrentLocationWithCoords();
+      if(location != null){
+        _weather = await _service.getWeatherByCoordinates(
+          location['lat'] as double,
+          location['lon'] as double,
+          location['name'] as String,
+        );
         _forecast = await _service.getForecast(
-          _weather!.lat,
-          _weather!.lon,
+          location['lat'] as double,
+          location['lon'] as double,
         );
       }
       else{
@@ -64,6 +68,22 @@ Future<void> fetchWeather(String city) async {
     notifyListeners();
   }
 }
+
+  Future<void> fetchWeatherWithCoordinates(
+      double lat, double lon, String cityName) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+    try {
+      _weather = await _service.getWeatherByCoordinates(lat, lon, cityName);
+      _forecast = await _service.getForecast(_weather!.lat, _weather!.lon);
+    } catch (e) {
+      _errorMessage = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 
 
 }

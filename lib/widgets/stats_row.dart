@@ -23,7 +23,7 @@ class StatsRow extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Row(
           mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _statItem(context, 'Temp', '${weather.feelsLike.toStringAsFixed(0)}°C', 'Feels Like'),
               _divider(scheme),
@@ -36,6 +36,13 @@ class StatsRow extends StatelessWidget {
                   _statItem(context, 'Wind', '${weather.windSpeed} m/s', 'Wind'),
                 ],
               ),
+              _divider(scheme),
+              _statItem(
+                context,
+                'Visibility',
+                '${(weather.visibility / 1000).toStringAsFixed(1)} km',
+                'Visibility',
+              ),
 
             ],
           ),
@@ -47,6 +54,7 @@ class StatsRow extends StatelessWidget {
       width: 1,
       height: 40,
       color: scheme.onSurface.withValues(alpha: 0.1),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
     );
   }
   Widget _statItem(BuildContext context, String image, String value,String label){
