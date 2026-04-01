@@ -119,7 +119,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void _showSearchDialog(BuildContext context){
     showModalBottomSheet(
       useSafeArea: true,
-        sheetAnimationStyle: SheetAnimationType.fade,
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
         context: context,

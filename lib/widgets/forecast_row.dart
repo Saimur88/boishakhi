@@ -12,8 +12,8 @@ class ForecastRow extends StatelessWidget {
       bool isNight = time.hour < 6 || time.hour >= 18;
 
       if (code == 0) return isNight ? 'Clear_Night' : 'Clear';
-      if (code <= 2) return isNight ? 'Clouds_Night' : 'Partly_Cloudy';
-      if (code == 3) return 'Clouds';
+      if (code == 1 || code == 2) return isNight ? 'Partly_Cloudy_Night' : 'Partly_Cloudy';
+      if (code == 3) return isNight? 'Clouds_Night' : 'Clouds';
       if (code <= 48) return 'Atmosphere';
       if (code <= 55) return 'Drizzle';
       if (code <= 65) return 'Rain';
@@ -49,7 +49,6 @@ class ForecastRow extends StatelessWidget {
     );
   }
   Widget _forecastItem(BuildContext context, String type, String time,int rainChances,double temp){
-    print(time);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -72,7 +71,6 @@ class ForecastRow extends StatelessWidget {
     );
   }
   String _formatUnixTime(DateTime time) {
-    print(time);
     final hour = time.hour;
     final period = hour >= 12 ? 'PM' : 'AM';
     final hour12 = hour > 12

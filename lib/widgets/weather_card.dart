@@ -11,14 +11,21 @@ class WeatherCard extends StatelessWidget {
     bool isNight = weather.timestamp.hour < 6 || weather.timestamp.hour >= 18;
 
     String getWeatherType(String main){
-
-      if(isNight && (main == 'Clear' || main == 'Cloudy')) {
-        return main == 'Clear' ? 'Clear_Night' : 'Clouds_Night' ;
+      final m = main.trim();
+      if(isNight){
+        if(m == 'Clear') return 'Clear_Night';
+        if(m== 'Cloudy'){
+          return 'Clouds_Night';
+        }
+        if(m == 'Partly Cloudy' || m.contains('Partly')){
+          return 'Partly_Cloudy_Night';
+        }
       }
+      //Daytime
       if(main == 'Partly Cloudy') return 'Partly_Cloudy';
-      if(main == 'Cloudy') return 'Clouds';
+      if(main == 'Cloudy' || m.contains('Cloud')) return 'Clouds';
       if(main == 'Fog') return 'Atmosphere';
-      return main;
+      return m;
     }
 
     String toSentenceCase(String text){

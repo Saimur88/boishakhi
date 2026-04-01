@@ -18,22 +18,27 @@ class StatsRow extends StatelessWidget {
         color: scheme.surface,
           borderRadius: BorderRadius.circular(24)
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _statItem(context, 'Temp', '${weather.feelsLike.toStringAsFixed(0)}°C', 'Feels Like'),
-          _divider(scheme),
-          _statItem(context, 'Humidity', '${weather.humidity}%', 'Humidity'),
-          _divider(scheme),
-          _statItem(context, 'Drizzle', '${forecast[0].rainChances.toStringAsFixed(1)}%', 'Rain Chance'),
-          _divider(scheme),
-          Column(
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _statItem(context, 'Wind', '${weather.windSpeed} m/s', 'Wind'),
+              _statItem(context, 'Temp', '${weather.feelsLike.toStringAsFixed(0)}°C', 'Feels Like'),
+              _divider(scheme),
+              _statItem(context, 'Humidity', '${weather.humidity}%', 'Humidity'),
+              _divider(scheme),
+              _statItem(context, 'Drizzle', '${forecast[0].rainChances.toStringAsFixed(1)}%', 'Rain Chance'),
+              _divider(scheme),
+              Column(
+                children: [
+                  _statItem(context, 'Wind', '${weather.windSpeed} m/s', 'Wind'),
+                ],
+              ),
+
             ],
           ),
-
-        ],
       ),
     );
   }
