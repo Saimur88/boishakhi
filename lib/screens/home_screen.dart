@@ -81,9 +81,9 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 16),
           if(provider.weather != null)
             SunTimesRow(weather: provider.weather!),
-          const SizedBox(height: 32),
+          const SizedBox(height: 16),
           ForecastTabBar(onTabChanged: _onForecastTabChanged),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
           if(provider.weather != null)
           ForecastRow(forecast: provider.forecast!, forecasttabIndex: _forecasttabIndex,),
             const SizedBox(height: 4),

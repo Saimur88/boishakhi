@@ -13,18 +13,34 @@ class WeatherCard extends StatelessWidget {
     String getWeatherType(String main){
       final m = main.trim();
       if(isNight){
-        if(m == 'Clear') return 'Clear_Night';
         if(m== 'Cloudy'){
-          return 'Clouds_Night';
+          return 'Cloudy_Night';
         }
         if(m == 'Partly Cloudy' || m.contains('Partly')){
           return 'Partly_Cloudy_Night';
         }
+        if(m == 'Drizzle' || m.contains('Drizzle')){
+          return 'Drizzle_Night';
+        }
+        if(m == 'Rain' || m.contains('Rain')){
+          return 'Rainy_Night';
+        }
+        if(m == 'Snow' || m.contains('Snow')){
+          return 'Snowy_Night';
+        }
+        return 'Clear_Night';
       }
       //Daytime
       if(main == 'Partly Cloudy') return 'Partly_Cloudy';
-      if(main == 'Cloudy' || m.contains('Cloud')) return 'Clouds';
+      if(main == 'Cloudy' || m.contains('Cloud')) return 'Cloudy';
       if(main == 'Fog') return 'Atmosphere';
+      if(main == 'Snow' || m.contains('Snow')) return 'Snow';
+      if(main == 'Drizzle' || m.contains('Drizzle')) return 'Drizzle';
+      if(main == 'Rain' || m.contains('Rain')) return 'Rainy';
+      if(main == 'Thunderstorm' || m.contains('Thunderstorm')) return 'Thunderstorm';
+      if(main == 'Clear') return 'Clear';
+
+
       return m;
     }
 
