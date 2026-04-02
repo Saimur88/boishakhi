@@ -9,41 +9,40 @@ class StatsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final daylightSeconds = weather.daylightDuration.toInt();
+    final daylightHours = daylightSeconds ~/ 3600;
+    final daylightMinutes = (daylightSeconds % 3600) ~/ 60;
+
     final visibility = '${weather.visibility / 1000}';
     final scheme = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
-        color: scheme.surface,
+        color: scheme.surface.withValues(alpha: 0.4),
           borderRadius: BorderRadius.circular(24)
       ),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 14),
         child: Row(
           mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _statItem(context, 'Temp', '${weather.feelsLike.toStringAsFixed(0)}°C', 'Feels Like'),
+              _statItem(context, 'Rain_Chance', '${weather.maxRainChance}%', 'Rain Chance'),
               _divider(scheme),
-              _statItem(context, 'Humidity', '${weather.humidity}%', 'Humidity'),
+              _statItem(context, 'Cloud_Cover', '${weather.cloudCover}%', 'Cloud Cover'),
               _divider(scheme),
-              _statItem(context, 'Drizzle', '${forecast[0].rainChances.toStringAsFixed(1)}%', 'Rain Chance'),
+              _statItem(context, 'Wind_Direction', WeatherModel.getWindDirectionText(weather.windDirection), 'Wind Direction'),
               _divider(scheme),
-              Column(
-                children: [
-                  _statItem(context, 'Wind', '${weather.windSpeed} m/s', 'Wind'),
-                ],
-              ),
+              _statItem(context, 'Daylight_Duration', '$daylightHours : $daylightMinutes', 'Daylight Duration'),
               _divider(scheme),
-              _statItem(
-                context,
-                'Visibility',
-                '${(weather.visibility / 1000).toStringAsFixed(1)} km',
-                'Visibility',
-              ),
-
+              _statItem(context, 'UV_Index', '${weather.uvIndex}', 'UV Index'),
+              _divider(scheme),
+              _statItem(context, 'Dew_Point', '${weather.dewPoint.round()}°C', 'Dew Point'),
+              _divider(scheme),
+              _statItem(context, 'Visibility', '$visibility km', 'Visibility',),
             ],
           ),
       ),
@@ -62,8 +61,15 @@ class StatsRow extends StatelessWidget {
       children: [
         Image.asset('assets/images/weather_icons/$image.png', width: 24,),
         const SizedBox(height: 8),
-        Text(value,style: Theme.of(context).textTheme.titleMedium,),
-        Text(label,style: Theme.of(context).textTheme.bodySmall,),
+        Text(value,style: TextStyle(
+          fontSize: 12,
+            color: Theme.of(context).colorScheme.onSurface,
+          fontWeight: FontWeight.w700
+        )),
+        Text(label,style: TextStyle(
+          fontSize: 10,
+          fontWeight: FontWeight.w700
+        ),),
       ],
     );
   }

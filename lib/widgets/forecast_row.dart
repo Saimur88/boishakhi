@@ -2,7 +2,8 @@ import 'package:boishakhi/models/forecast_model.dart';
 import 'package:flutter/material.dart';
 class ForecastRow extends StatelessWidget {
   final List<ForecastModel> forecast;
-  const ForecastRow({super.key,required this.forecast});
+  final int forecasttabIndex;
+  const ForecastRow({super.key,required this.forecast,required this.forecasttabIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class ForecastRow extends StatelessWidget {
 
 
     return SizedBox(
-      height: 135,
+      height: 125,
       child: ListView.builder(
         shrinkWrap: true,
         itemCount: forecast.length,
@@ -36,10 +37,10 @@ class ForecastRow extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.all(4.0),
             child: Container(
-              width: 95,
-              padding: EdgeInsets.all(16),
+              width: 90,
+              padding: EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: scheme.surface,
+                color: scheme.surface.withValues(alpha: 0.4),
                 borderRadius: BorderRadius.circular(24),
               ),
               child: _forecastItem(context, type, _formatUnixTime(forecast[index].time), forecast[index].rainChances, forecast[index].temperature),
@@ -52,11 +53,15 @@ class ForecastRow extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(time.toString(),style: Theme.of(context).textTheme.titleMedium,),
+        Text(time.toString(),style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w700
+        ),),
+        const SizedBox(height: 6,),
         rainChances >= 20 ? Text('$rainChances %',style: Theme.of(context).textTheme.labelMedium,) : type == 'Rain' ? Text('Possible Rain',style: TextStyle(
           fontSize: 9,
           fontWeight: FontWeight.w800
-        )) : const SizedBox(height: 8,),
+        )) : const SizedBox(height: 12,),
 
         Image.asset(
           rainChances >= 20 ? _getRainChanceIcon(rainChances) :

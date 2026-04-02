@@ -8,7 +8,7 @@ class WeatherCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    bool isNight = weather.timestamp.hour < 6 || weather.timestamp.hour >= 18;
+    bool isNight = weather.timestamp.hour < 7 || weather.timestamp.hour >= 18;
 
     String getWeatherType(String main){
       final m = main.trim();
@@ -37,40 +37,103 @@ class WeatherCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      height: 150,
+      height: 180,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: scheme.surface,
+        image: DecorationImage(image: AssetImage('assets/images/weather_card_background/$type.png'),
+            opacity: 0.3,
+            fit: BoxFit.cover),
+        //color: scheme.surface,
+        gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              scheme.primary.withAlpha(100),
+              scheme.primary.withAlpha(0),
+            ]),
         borderRadius: BorderRadius.circular(24),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
                 _formatDate(weather.timestamp),
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               const SizedBox(height: 4),
+
               Text(
-                toSentenceCase(weather.description),
-                style: Theme.of(context).textTheme.titleMedium,
+                '${weather.temperature.round()}°C',
+                style: TextStyle(
+                  fontSize: 50,
+                  fontWeight: FontWeight.w700,
+                  color: scheme.onSurface,
+                ),
               ),
+
               const SizedBox(height: 4),
-              Text(
-                '${weather.temperature.toStringAsFixed(0)}°C',
-                style: Theme.of(context).textTheme.displayLarge,
+              Row(
+                children: [
+                  Icon(Icons.arrow_upward,size: 16,),
+                  Text('${weather.highestTemp.round()}°C',),
+                  const SizedBox(width: 8,),
+                  Icon(Icons.arrow_downward,size: 16,),
+                  Text('${weather.lowestTemp.round()}°C',
+)
+                ],
               ),
             ],
           ),
-          Image.asset(
-            'assets/images/weather_icons/$type.png',
-            width: 80,
-            height: 50,
-            colorBlendMode: BlendMode.srcIn,
-          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              //const SizedBox(height: 50),
+              Text(
+                toSentenceCase(weather.description),
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.w700,
+                  color: scheme.onSurface,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  Icon(Icons.wind_power,size: 16,),
+                  Text('${weather.windSpeed.toStringAsFixed(1)} m/s',
+                      style: TextStyle(
+                          fontSize: 12,
+                          color: scheme.onSurface,
+                          fontWeight: FontWeight.w700
+                      )),
+                  const SizedBox(width: 8,),
+                  Icon(Icons.water_drop_outlined,size: 16,),
+                  Text('${weather.humidity.toStringAsFixed(1)}%',
+                      style: TextStyle(
+                          fontSize: 12,
+                          color: scheme.onSurface,
+                          fontWeight: FontWeight.w700
+                      )),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  Text('Feels Like', style: Theme.of(context).textTheme.titleSmall,),
+                  Text(' ${weather.feelsLike.toStringAsFixed(0)}°C',
+                    style: Theme.of(context).textTheme.titleSmall,),
+                  Icon(Icons.thermostat_outlined,size: 16,color: weather.feelsLike > 25 ? scheme.error : scheme.primary,),
+                ],
+              )
+
+            ],
+          )
         ],
       ),
     );

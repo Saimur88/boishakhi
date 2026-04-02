@@ -56,9 +56,10 @@ class WeatherService {
     final omUrl = Uri.parse(
       '$_baseUrl?latitude=$lat&longitude=$lon'
           '&current=temperature_2m,relative_humidity_2m,apparent_temperature,'
-          'weather_code,wind_speed_10m,visibility,precipitation'
-          '&daily=sunrise,sunset'
-          '&timezone=auto',
+          'weather_code,wind_speed_10m,visibility,precipitation,'
+          'cloud_cover,dew_point_2m,wind_direction_10m'
+          '&daily=sunrise,sunset,temperature_2m_max,temperature_2m_min,'
+          'precipitation_probability_max,uv_index_max,daylight_duration',
     );
     final response = await http.get(omUrl);
     if(response.statusCode == 200){
@@ -105,7 +106,7 @@ class WeatherService {
     final url = Uri.parse(
       '$_baseUrl?latitude=$lat&longitude=$lon'
           '&hourly=temperature_2m,weather_code,precipitation_probability'
-          '&timezone=auto&forecast_days=2',
+          '&timezone=auto&forecast_days=4',
     );
     final response = await http.get(url);
     if (response.statusCode == 200) {

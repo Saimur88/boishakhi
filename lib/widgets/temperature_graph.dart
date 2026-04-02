@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 class TemperatureGraph extends StatelessWidget {
   final List<ForecastModel> forecast;
-  const TemperatureGraph({super.key, required this.forecast});
+  final int forecasttabIndex;
+  const TemperatureGraph({super.key, required this.forecast,required this.forecasttabIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -78,8 +79,9 @@ class TemperatureGraph extends StatelessWidget {
                 showTitles: true,
                 getTitlesWidget: (value, meta) {
                   final index = value.toInt();
-                  if (index < 0 || index >= forecast.length)
+                  if (index < 0 || index >= forecast.length) {
                     return SizedBox.shrink();
+                  }
                   final time = forecast[index].time;
                   final hour = time.hour;
                   final period = hour >= 12 ? 'PM' : 'AM';

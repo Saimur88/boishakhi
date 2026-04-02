@@ -10,24 +10,20 @@ class SunTimesRow extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       decoration: BoxDecoration(
-        color: scheme.surface,
+        color: scheme.surface.withValues(alpha: 0.4),
         borderRadius: BorderRadius.circular(24),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _sunItem(
             context,
             time: weather.sunrise,
             label: 'Sunrise',
           ),
-          Container(
-            width: 1,
-            height: 40,
-            color: scheme.onSurface.withValues(alpha: 0.1),
-          ),
+          _divider(scheme),
           _sunItem(
             context,
             time: weather.sunset,
@@ -44,19 +40,32 @@ class SunTimesRow extends StatelessWidget {
     required String label,
   }) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Image.asset('assets/images/sun_times/$label.png', width: 50),
+        Image.asset('assets/images/sun_times/$label.png', width: 40),
         const SizedBox(width: 10,),
-
         Column(
           children: [
-            Text(time, style: Theme.of(context).textTheme.titleMedium),
-            Text(label, style: Theme.of(context).textTheme.bodySmall),
+            Text(time, style: TextStyle(
+              fontSize: 16,
+              color: Theme.of(context).colorScheme.onSurface,
+            )),
+            Text(label, style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w700
+            )),
           ],
         ),
 
       ],
+    );
+  }
+  Widget _divider(ColorScheme scheme){
+    return Container(
+      width: 1,
+      height: 40,
+      color: scheme.onSurface.withValues(alpha: 0.1),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
     );
   }
 }

@@ -78,17 +78,17 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 16),
           if(provider.weather != null)
           StatsRow(weather: provider.weather!,forecast: provider.forecast!,),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
           if(provider.weather != null)
             SunTimesRow(weather: provider.weather!),
-          const SizedBox(height: 8),
+          const SizedBox(height: 32),
           ForecastTabBar(onTabChanged: _onForecastTabChanged),
           const SizedBox(height: 8),
           if(provider.weather != null)
-          ForecastRow(forecast: provider.forecast!),
+          ForecastRow(forecast: provider.forecast!, forecasttabIndex: _forecasttabIndex,),
             const SizedBox(height: 4),
           if(provider.weather != null)
-          TemperatureGraph(forecast: provider.forecast!),
+          TemperatureGraph(forecast: provider.forecast!, forecasttabIndex: _forecasttabIndex,),
 
         ],
       ),
@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildHeader(BuildContext context, WeatherProvider provider) {
     return InkWell(
       borderRadius: BorderRadius.circular(24),
-      splashColor: Theme.of(context).colorScheme.onSurface.withAlpha(50),
+      splashColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4),
       focusColor: null,
 
       onTap: ()=> _showSearchDialog(context),
