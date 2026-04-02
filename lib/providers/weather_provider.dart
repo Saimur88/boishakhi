@@ -52,23 +52,6 @@ class WeatherProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-
-Future<void> fetchWeather(String city) async {
-  _isLoading = true;
-  _errorMessage = null;
-  notifyListeners();
-  try{
-    _weather = await _service.getWeatherByCity(city);
-    _forecast = await _service.getForecast(_weather!.lat, _weather!.lon);
-  }catch(e){
-    _errorMessage = e.toString();
-  }finally{
-    _isLoading = false;
-    notifyListeners();
-  }
-}
-
   Future<void> fetchWeatherWithCoordinates(
       double lat, double lon, String cityName) async {
     _isLoading = true;

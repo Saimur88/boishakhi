@@ -25,7 +25,7 @@ class ForecastRow extends StatelessWidget {
 
 
     return SizedBox(
-      height: 140,
+      height: 135,
       child: ListView.builder(
         shrinkWrap: true,
         itemCount: forecast.length,

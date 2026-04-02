@@ -1,3 +1,4 @@
+import 'package:boishakhi/widgets/forecast_tab_bar.dart';
 import 'package:boishakhi/widgets/search_sheet.dart';
 import 'package:boishakhi/widgets/sun_times_row.dart';
 import 'package:boishakhi/widgets/temperature_graph.dart';
@@ -23,6 +24,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+  int _forecasttabIndex = 0;
+  void _onForecastTabChanged(int index){
+    setState(() {
+      _forecasttabIndex = index;
+    });
   }
 
   @override
@@ -71,13 +78,15 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 16),
           if(provider.weather != null)
           StatsRow(weather: provider.weather!,forecast: provider.forecast!,),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
           if(provider.weather != null)
             SunTimesRow(weather: provider.weather!),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
+          ForecastTabBar(onTabChanged: _onForecastTabChanged),
+          const SizedBox(height: 8),
           if(provider.weather != null)
           ForecastRow(forecast: provider.forecast!),
-            const SizedBox(height: 16),
+            const SizedBox(height: 4),
           if(provider.weather != null)
           TemperatureGraph(forecast: provider.forecast!),
 

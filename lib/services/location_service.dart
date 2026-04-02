@@ -22,7 +22,7 @@ class LocationService {
    );
    if(placemarks.isEmpty) return null;
    final place = placemarks.first;
-   final cityName =place.locality ?? place.administrativeArea ?? 'Unknown';
+   final cityName =placemarks.first.locality ?? place.administrativeArea ?? 'Unknown';
    return {
      'name': cityName,
      'lat': position.latitude,

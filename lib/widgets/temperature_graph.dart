@@ -30,10 +30,10 @@ class TemperatureGraph extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      height: 180,
+      height: 170,
       padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: scheme.surface.withAlpha(50),
+        color: Colors.transparent,
         borderRadius: BorderRadius.circular(24),
       ),
       child: LineChart(
