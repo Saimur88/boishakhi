@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 
 class TemperatureGraph extends StatelessWidget {
   final List<ForecastModel> forecast;
-  final int forecasttabIndex;
-  const TemperatureGraph({super.key, required this.forecast,required this.forecasttabIndex});
+  final int forecastTabIndex;
+  const TemperatureGraph({
+    super.key,
+    required this.forecast,
+    required this.forecastTabIndex,
+  });
 
   @override
   Widget build(BuildContext context) {
