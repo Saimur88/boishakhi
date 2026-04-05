@@ -19,9 +19,7 @@ class _ForecastTabBarState extends State<ForecastTabBar>
     super.initState();
     _tabController = TabController(length: _tabs.length, vsync: this);
     _tabController.addListener(() {
-      if (!_tabController.indexIsChanging) {
         widget.tabNotifier.value = _tabController.index;
-      }
     });
   }
 
@@ -39,43 +37,85 @@ class _ForecastTabBarState extends State<ForecastTabBar>
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          TabBar(
-            splashBorderRadius: BorderRadius.circular(99),
-            splashFactory: NoSplash.splashFactory,
-            indicatorColor: Colors.transparent,
-            dividerColor: Colors.transparent,
-            labelColor: scheme.primary,
-            unselectedLabelColor: scheme.onSurface.withValues(alpha: 0.5),
-            labelStyle: Theme.of(context).textTheme.titleSmall,
-            unselectedLabelStyle: Theme.of(context).textTheme.labelSmall,
-            controller: _tabController,
-            tabs: _tabs.map((e) => Tab(height: 25, text: e)).toList(),
-          ),
-          ValueListenableBuilder<int>(
-            valueListenable: widget.tabNotifier,
-            builder: (context, selectedIndex, _) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: List.generate(_tabs.length, (i) {
-                  final isSelected = i == selectedIndex;
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 250),
-                    curve: Curves.bounceOut,
-                    width: 6,
-                    height: 6,
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? scheme.primary
-                          : scheme.onSurface.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(99),
-                    ),
-                  );
-                }),
-              );
-            }
-          ),
+          _buildGlassTabBar(context, scheme),
+          const SizedBox(height: 8),
+          _buildDots(),
         ],
       ),
     );
+  }
+  Widget _buildGlassTabBar(BuildContext, context){
+    return ClipRRect(
+      borderRadius: BorderRadiusGeometry.circular(50),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(50),
+          border: Border.all(
+            color: Colors.transparent,
+            width: 1,
+          ),
+        ),
+        padding: const EdgeInsets.all(4),
+        child: TabBar(
+          controller: _tabController,
+          splashFactory: NoSplash.splashFactory,
+          overlayColor: WidgetStateProperty.all(Colors.transparent),
+          dividerColor: Colors.transparent,
+          indicator: BoxDecoration(
+            borderRadius: BorderRadius.circular(50),
+            color: Colors.transparent,
+            border: Border.all(
+              color: Colors.white.withAlpha(20),
+              width: 1,
+            ),
+          ),
+          indicatorSize: TabBarIndicatorSize.tab,
+          labelColor: Colors.white,
+          unselectedLabelColor: Colors.grey,
+          labelStyle: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+          ),
+          unselectedLabelStyle: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+          ),
+          tabs: _tabs.map((e) => Tab(height: 36, text: e)).toList(),
+        ),
+      ),
+    );
+  }
+  Widget _buildDots(){
+    return AnimatedBuilder(
+        animation: _tabController.animation!,
+        builder: (context, _){
+          final animValue = _tabController.animation!.value;
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: List.generate(_tabs.length, (i){
+              final selected = (1.0 - (animValue - i).abs()).clamp(0.0, 1.0);
+              final size = 5.0 + (selected * 3.0);
+              final color = Color.lerp(
+               Colors.grey,
+                  Colors.white,
+                  selected,
+
+              )!;
+              return Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Container(
+                  width: size,
+                  height: size,
+                  decoration: BoxDecoration(
+                    color: color,
+                    borderRadius: BorderRadius.circular(99),
+                  ),
+                ),
+              );
+            }),
+          );
+        });
   }
 }

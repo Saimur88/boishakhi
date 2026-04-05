@@ -117,7 +117,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildHeader(BuildContext context, WeatherProvider provider) {
     final cityName = provider.weather?.cityName ?? 'Loading...';
-    final screenW = MediaQuery.of(context).size.width;
 
     return InkWell(
       borderRadius: BorderRadius.circular(24),
@@ -137,43 +136,49 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(Icons.location_on_outlined, size: 24),
-              
+
               Flexible(
-                  child: LayoutBuilder(builder: (context, constraints){
-                final textspan = TextSpan(
-                  text: cityName,
-                  style: Theme.of(context).textTheme.headlineMedium,
-                );
-                final textpainter = TextPainter(
-                  text: textspan,
-                  textDirection: TextDirection.ltr,
-                  maxLines: 1,
-                )..layout();
-
-                final isOverflow = textpainter.width > constraints.maxWidth;
-
-                return SizedBox(
-                    height: 30,
-                    child: isOverflow
-                        ? Marquee(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final textspan = TextSpan(
                       text: cityName,
                       style: Theme.of(context).textTheme.headlineMedium,
-                      scrollAxis: Axis.horizontal,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      blankSpace: 40.0,
-                      velocity: 30.0,
-                      pauseAfterRound: const Duration(seconds: 1),
-                      startPadding: 0.0,
-                      accelerationDuration: const Duration(seconds: 1),
-                      accelerationCurve: Curves.linear,
-                      decelerationDuration: const Duration(milliseconds: 500),
-                      decelerationCurve: Curves.easeOut,
-                    ) : Text(
-                      cityName,
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    )
-                );
-              })),
+                    );
+                    final textpainter = TextPainter(
+                      text: textspan,
+                      textDirection: TextDirection.ltr,
+                      maxLines: 1,
+                    )..layout();
+
+                    final isOverflow = textpainter.width > constraints.maxWidth;
+
+                    return isOverflow
+                        ? SizedBox(
+                      height: 30,
+                            child: Marquee(
+                              text: cityName,
+                              style: Theme.of(context).textTheme.headlineMedium,
+                              scrollAxis: Axis.horizontal,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              blankSpace: 40.0,
+                              velocity: 30.0,
+                              pauseAfterRound: const Duration(seconds: 1),
+                              startPadding: 0.0,
+                              accelerationDuration: const Duration(seconds: 1),
+                              accelerationCurve: Curves.linear,
+                              decelerationDuration: const Duration(
+                                milliseconds: 500,
+                              ),
+                              decelerationCurve: Curves.easeOut,
+                            ),
+                          )
+                        : Text(
+                            cityName,
+                            style: Theme.of(context).textTheme.headlineMedium,
+                          );
+                  },
+                ),
+              ),
               const SizedBox(width: 8),
               Icon(Icons.keyboard_double_arrow_down_rounded),
             ],
