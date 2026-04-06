@@ -1,3 +1,4 @@
+import 'package:boishakhi/models/forecast_model.dart';
 import 'package:boishakhi/widgets/forecast_tab_bar.dart';
 import 'package:boishakhi/widgets/search_sheet.dart';
 import 'package:boishakhi/widgets/sun_times_row.dart';
@@ -28,6 +29,45 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   final ValueNotifier<int> _forecastTabNotifier = ValueNotifier(0);
+
+  List<ForecastModel> _getFilteredForecast(
+    List<ForecastModel> forecast,
+    int tabIndex,
+  ) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final tomorrow = today.add(const Duration(days: 1));
+    final fourDaysLater = today.add(const Duration(days: 4));
+
+    switch (tabIndex) {
+      case 0:
+        return forecast
+            .where(
+              (f) =>
+                  f.time.year == today.year &&
+                  f.time.month == today.month &&
+                  f.time.day == today.day,
+            )
+            .toList();
+      case 1:
+        return forecast
+            .where(
+              (f) =>
+                  f.time.year == tomorrow.year &&
+                  f.time.month == tomorrow.month &&
+                  f.time.day == tomorrow.day,
+            )
+            .toList();
+      case 2:
+        return forecast
+            .where(
+              (f) => f.time.isAfter(tomorrow) && f.time.isBefore(fourDaysLater),
+            )
+            .toList();
+        default:
+        return forecast;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,18 +132,19 @@ class _HomeScreenState extends State<HomeScreen> {
             ValueListenableBuilder(
               valueListenable: _forecastTabNotifier,
               builder: (context, tabIndex, _) {
+                final filtered = _getFilteredForecast(provider.forecast!, tabIndex);
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     ForecastRow(
-                      forecast: provider.forecast!,
+                      forecast: filtered,
                       forecastTabIndex: tabIndex,
                     ),
                     const SizedBox(height: 4),
                     if (provider.weather != null)
                       TemperatureGraph(
-                        forecast: provider.forecast!,
+                        forecast: filtered,
                         forecastTabIndex: tabIndex,
                       ),
                   ],
@@ -154,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     return isOverflow
                         ? SizedBox(
-                      height: 30,
+                            height: 30,
                             child: Marquee(
                               text: cityName,
                               style: Theme.of(context).textTheme.headlineMedium,

@@ -64,7 +64,7 @@ class _ForecastTabBarState extends State<ForecastTabBar>
           dividerColor: Colors.transparent,
           indicator: BoxDecoration(
             borderRadius: BorderRadius.circular(50),
-            color: Colors.transparent,
+            color: Colors.grey.withAlpha(10),
             border: Border.all(
               color: Colors.white.withAlpha(20),
               width: 1,
