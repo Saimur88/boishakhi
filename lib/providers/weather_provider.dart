@@ -68,5 +68,17 @@ class WeatherProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> refresh()async{
+    if(_weather != null){
+      await  fetchWeatherWithCoordinates(
+        _weather!.lat,
+        _weather!.lon,
+        _weather!.cityName,
+      );
+    }else{
+      await fetchWeatherByLocation();
+    }
+  }
+
 
 }

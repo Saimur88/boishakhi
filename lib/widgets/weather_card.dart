@@ -53,7 +53,7 @@ class WeatherCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      height: 180,
+      // height: 170,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         image: DecorationImage(image: AssetImage('assets/images/weather_card_background/$type.png'),

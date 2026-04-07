@@ -38,7 +38,6 @@ class _ForecastTabBarState extends State<ForecastTabBar>
         mainAxisSize: MainAxisSize.min,
         children: [
           _buildGlassTabBar(context, scheme),
-          const SizedBox(height: 8),
           _buildDots(),
         ],
       ),

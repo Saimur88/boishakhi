@@ -96,7 +96,9 @@ class TemperatureGraph extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 4.0),
                     child: Text(
                       '$hour12 $period',
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: TextStyle(
+                        fontSize: 10
+                      ),
                     ),
                   );
                 },
