@@ -2,8 +2,8 @@
   import 'package:flutter/material.dart';
   class ForecastRow extends StatelessWidget {
     final List<ForecastModel> forecast;
-    final int forecastTabIndex;
-    const ForecastRow({super.key,required this.forecast,required this.forecastTabIndex});
+
+    const ForecastRow({super.key,required this.forecast});
 
     @override
     Widget build(BuildContext context) {

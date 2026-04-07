@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
               (f) => f.time.isAfter(tomorrow) && f.time.isBefore(fourDaysLater),
             )
             .toList();
-        default:
+      default:
         return forecast;
     }
   }
@@ -137,16 +137,45 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    ForecastRow(
-                      forecast: filtered,
-                      forecastTabIndex: tabIndex,
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 400),
+                      switchInCurve: Curves.easeOutCubic,
+                      switchOutCurve: Curves.easeInCubic,
+                      transitionBuilder: (child, animation) {
+                        final isIncoming =
+                            animation.status == AnimationStatus.forward ||
+                                animation.status == AnimationStatus.completed;
+                        return SlideTransition(
+                          position: Tween<Offset>(
+                            begin: isIncoming
+                                ? const Offset(1.0, 0)
+                                : const Offset(-1.0, 0),
+                            end: Offset.zero,
+                          ).animate(CurvedAnimation(
+                            parent: animation,
+                            curve: Curves.easeOutCubic,
+                          )),
+                          child: FadeTransition(opacity: animation, child: child),
+                        );
+                      },
+                      child: ForecastRow(
+                        key: ValueKey(tabIndex),
+                        forecast: filtered,
+                      ),
                     ),
                     const SizedBox(height: 4),
-                    if (provider.weather != null)
-                      TemperatureGraph(
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 400),
+                      switchInCurve: Curves.easeOut,
+                      switchOutCurve: Curves.easeIn,
+                      transitionBuilder: (child, animation) {
+                        return FadeTransition(opacity: animation, child: child);
+                      },
+                      child: TemperatureGraph(
+                        key: ValueKey(tabIndex),
                         forecast: filtered,
-                        forecastTabIndex: tabIndex,
                       ),
+                    ),
                   ],
                 );
               },
