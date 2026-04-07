@@ -17,16 +17,22 @@ class WeatherProvider extends ChangeNotifier {
 
   WeatherModel? _weather;
   List<ForecastModel>? _forecast;
-  bool _isLoading = false;
   String? _errorMessage;
 
+  bool _isInitialLoading = true;
+  bool get isInitialLoading => _isInitialLoading;
+
+  bool _isRefreshing = false;
+  bool get isRefreshing => _isRefreshing;
+
+
   WeatherModel? get weather => _weather;
-  bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   List<ForecastModel>? get forecast => _forecast;
 
   Future<void> fetchWeatherByLocation() async {
-    _isLoading = true;
+    _isInitialLoading = true;
+    _isRefreshing = false;
     _errorMessage = null;
     notifyListeners();
     try {
@@ -48,13 +54,12 @@ class WeatherProvider extends ChangeNotifier {
     }catch (e){
       _errorMessage = e.toString();
     }finally{
-      _isLoading = false;
+      _isInitialLoading = false;
       notifyListeners();
     }
   }
   Future<void> fetchWeatherWithCoordinates(
       double lat, double lon, String cityName) async {
-    _isLoading = true;
     _errorMessage = null;
     notifyListeners();
     try {
@@ -63,20 +68,27 @@ class WeatherProvider extends ChangeNotifier {
     } catch (e) {
       _errorMessage = e.toString();
     } finally {
-      _isLoading = false;
       notifyListeners();
     }
   }
 
   Future<void> refresh()async{
-    if(_weather != null){
+    if(_weather == null){
+      await fetchWeatherByLocation();
+      return;
+    }
+    _isRefreshing = true;
+    _errorMessage = null;
+    notifyListeners();
+    try {
       await  fetchWeatherWithCoordinates(
         _weather!.lat,
         _weather!.lon,
         _weather!.cityName,
       );
-    }else{
-      await fetchWeatherByLocation();
+    }finally{
+      _isRefreshing = false;
+      notifyListeners();
     }
   }
 

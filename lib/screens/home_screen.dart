@@ -106,9 +106,9 @@ class _HomeScreenState extends State<HomeScreen> {
         context,
       ).colorScheme.surface.withValues(alpha: 0.6),
       body: SafeArea(
-        child: provider.isLoading
+        child: provider.isInitialLoading && provider.weather == null
             ? const Center(child: CircularProgressIndicator())
-            : provider.errorMessage != null
+            : provider.errorMessage != null && provider.weather == null
             ? Center(child: Text(provider.errorMessage!))
             : _buildBody(context, provider),
       ),
@@ -116,80 +116,84 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildBody(BuildContext context, WeatherProvider provider) {
-    return RefreshIndicator(
-      onRefresh: () => provider.refresh(),
-      color: Theme.of(context).colorScheme.onSurface,
-      child: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHeader(context, provider),
-            const SizedBox(height: 16),
-            if (provider.weather != null) WeatherCard(weather: provider.weather!),
-            const SizedBox(height: 16),
-            if (provider.weather != null)
-              StatsRow(weather: provider.weather!, forecast: provider.forecast!),
-            const SizedBox(height: 16),
-            if (provider.weather != null) SunTimesRow(weather: provider.weather!),
-            const SizedBox(height: 16),
-            ForecastTabBar(tabNotifier: _forecastTabNotifier),
-            const SizedBox(height: 16),
-            if (provider.weather != null)
-              ValueListenableBuilder(
-                valueListenable: _forecastTabNotifier,
-                builder: (context, tabIndex, _) {
-                  final filtered = _getFilteredForecast(provider.forecast!, tabIndex);
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 400),
-                        switchInCurve: Curves.easeOutCubic,
-                        switchOutCurve: Curves.easeInCubic,
-                        transitionBuilder: (child, animation) {
-                          final isIncoming =
-                              animation.status == AnimationStatus.forward ||
-                                  animation.status == AnimationStatus.completed;
-                          return SlideTransition(
-                            position: Tween<Offset>(
-                              begin: isIncoming
-                                  ? const Offset(1.0, 0)
-                                  : const Offset(-1.0, 0),
-                              end: Offset.zero,
-                            ).animate(CurvedAnimation(
-                              parent: animation,
-                              curve: Curves.easeOutCubic,
-                            )),
-                            child: FadeTransition(opacity: animation, child: child),
-                          );
-                        },
-                        child: ForecastRow(
-                          key: ValueKey(tabIndex),
-                          forecast: filtered,
+    return Stack(
+      children: [
+        RefreshIndicator(
+        onRefresh: () => provider.refresh(),
+        color: Theme.of(context).colorScheme.onSurface,
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHeader(context, provider),
+              const SizedBox(height: 16),
+              if (provider.weather != null) WeatherCard(weather: provider.weather!),
+              const SizedBox(height: 16),
+              if (provider.weather != null)
+                StatsRow(weather: provider.weather!, forecast: provider.forecast!),
+              const SizedBox(height: 16),
+              if (provider.weather != null) SunTimesRow(weather: provider.weather!),
+              const SizedBox(height: 16),
+              ForecastTabBar(tabNotifier: _forecastTabNotifier),
+              const SizedBox(height: 16),
+              if (provider.weather != null)
+                ValueListenableBuilder(
+                  valueListenable: _forecastTabNotifier,
+                  builder: (context, tabIndex, _) {
+                    final filtered = _getFilteredForecast(provider.forecast!, tabIndex);
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 400),
+                          switchInCurve: Curves.easeOutCubic,
+                          switchOutCurve: Curves.easeInCubic,
+                          transitionBuilder: (child, animation) {
+                            final isIncoming =
+                                animation.status == AnimationStatus.forward ||
+                                    animation.status == AnimationStatus.completed;
+                            return SlideTransition(
+                              position: Tween<Offset>(
+                                begin: isIncoming
+                                    ? const Offset(1.0, 0)
+                                    : const Offset(-1.0, 0),
+                                end: Offset.zero,
+                              ).animate(CurvedAnimation(
+                                parent: animation,
+                                curve: Curves.easeOutCubic,
+                              )),
+                              child: FadeTransition(opacity: animation, child: child),
+                            );
+                          },
+                          child: ForecastRow(
+                            key: ValueKey(tabIndex),
+                            forecast: filtered,
+                          ),
                         ),
-                      ),
-                      AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 400),
-                        switchInCurve: Curves.easeOut,
-                        switchOutCurve: Curves.easeIn,
-                        transitionBuilder: (child, animation) {
-                          return FadeTransition(opacity: animation, child: child);
-                        },
-                        child: TemperatureGraph(
-                          key: ValueKey(tabIndex),
-                          forecast: filtered,
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 400),
+                          switchInCurve: Curves.easeOut,
+                          switchOutCurve: Curves.easeIn,
+                          transitionBuilder: (child, animation) {
+                            return FadeTransition(opacity: animation, child: child);
+                          },
+                          child: TemperatureGraph(
+                            key: ValueKey(tabIndex),
+                            forecast: filtered,
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-          ],
+                      ],
+                    );
+                  },
+                ),
+            ],
+          ),
         ),
       ),
+      ]
     );
   }
 
