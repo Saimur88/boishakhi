@@ -5,42 +5,36 @@ import 'package:http/http.dart' as http;
 
 import '../config.dart';
 
-class CityData{
+class CityData {
   final String name;
   final double lat;
   final double lon;
-  CityData({
-    required this.name,
-    required this.lat,
-    required this.lon,
-});
+  CityData({required this.name, required this.lat, required this.lon});
 }
 
 class WeatherService {
   static const _baseUrl = 'https://api.open-meteo.com/v1/forecast';
   static const _geoUrl = 'https://geocoding-api.open-meteo.com/v1/search';
 
-
   Future<WeatherModel> getWeatherByCity(String city) async {
-
     final coords = await _getCityCoordinates(city);
-    if(coords == null) throw Exception('City not found');
+    if (coords == null) throw Exception('City not found');
 
     return getWeatherByCoordinates(
       coords['lat']!,
       coords['lon']!,
       coords['name']!,
     );
-    }
+  }
 
   Future<Map<String, dynamic>?> _getCityCoordinates(String city) async {
     final url = Uri.parse(
-        '$_geoUrl?name=$city&count=10&language=en&country_code=BD',
+      '$_geoUrl?name=$city&count=10&language=en&country_code=BD',
     );
     final response = await http.get(url);
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
-      if(json['results'] == null || json['results'].isEmpty) return null;
+      if (json['results'] == null || json['results'].isEmpty) return null;
       final result = json['results'][0];
       return {
         'name': result['name'] as String,
@@ -51,25 +45,28 @@ class WeatherService {
     return null;
   }
 
-
-  Future<WeatherModel> getWeatherByCoordinates(double lat, double lon, String cityName) async {
+  Future<WeatherModel> getWeatherByCoordinates(
+    double lat,
+    double lon,
+    String cityName,
+  ) async {
     final omUrl = Uri.parse(
       '$_baseUrl?latitude=$lat&longitude=$lon'
-          '&current=temperature_2m,relative_humidity_2m,apparent_temperature,'
-          'weather_code,wind_speed_10m,visibility,precipitation,'
-          'cloud_cover,dew_point_2m,wind_direction_10m'
-          '&daily=sunrise,sunset,temperature_2m_max,temperature_2m_min,'
-          'precipitation_probability_max,uv_index_max,daylight_duration',
+      '&current=temperature_2m,relative_humidity_2m,apparent_temperature,'
+      'weather_code,wind_speed_10m,visibility,precipitation,'
+      'cloud_cover,dew_point_2m,wind_direction_10m'
+      '&daily=sunrise,sunset,temperature_2m_max,temperature_2m_min,'
+      'precipitation_probability_max,uv_index_max,daylight_duration'
+      '&timezone=auto',
     );
     final response = await http.get(omUrl);
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
       return WeatherModel.fromJson(json, cityName);
-    }else{
+    } else {
       throw Exception('Failed to load weather data');
     }
   }
-
 
   Future<List<CityData>> getCitySuggestionsWithCoords(String query) async {
     if (query.isEmpty) return [];
@@ -92,11 +89,7 @@ class WeatherService {
             ? '$city, $state, $country'
             : '$city, $country';
 
-        return CityData(
-          name: displayName,
-          lat: lat,
-          lon: lon,
-        );
+        return CityData(name: displayName, lat: lat, lon: lon);
       }).toList();
     }
     return [];
@@ -105,8 +98,8 @@ class WeatherService {
   Future<List<ForecastModel>> getForecast(double lat, double lon) async {
     final url = Uri.parse(
       '$_baseUrl?latitude=$lat&longitude=$lon'
-          '&hourly=temperature_2m,weather_code,precipitation_probability'
-          '&timezone=auto&forecast_days=5',
+      '&hourly=temperature_2m,weather_code,precipitation_probability'
+      '&timezone=auto&forecast_days=5',
     );
     final response = await http.get(url);
     if (response.statusCode == 200) {
@@ -116,8 +109,4 @@ class WeatherService {
       throw Exception('Forecast failed to load');
     }
   }
-
-
-
-
 }

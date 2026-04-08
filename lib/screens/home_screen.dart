@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final tomorrow = today.add(const Duration(days: 1));
-    final fourDaysLater = today.add(const Duration(days: 4));
+    final endofNext3Days = today.add(const Duration(days: 4));
 
     switch (tabIndex) {
       case 0:
@@ -69,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
       case 2:
         return forecast
             .where(
-              (f) => f.time.isAfter(tomorrow) && f.time.isBefore(fourDaysLater),
+              (f) => f.time.isAfter(tomorrow) && f.time.isBefore(endofNext3Days),
             )
             .toList();
       default:
@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Text(
               'Boishakhi - ',
-              style: GoogleFonts.abhayaLibre(
+              style: GoogleFonts.balooDa2(
                 fontSize: 24,
                 color: Theme.of(context).colorScheme.onSurface.withAlpha(180),
                 fontWeight: FontWeight.w700,
