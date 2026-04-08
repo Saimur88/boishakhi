@@ -5,6 +5,7 @@ import 'package:boishakhi/widgets/sun_times_row.dart';
 import 'package:boishakhi/widgets/temperature_graph.dart';
 import 'package:boishakhi/widgets/weather_card.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 import '../providers/weather_provider.dart';
@@ -41,14 +42,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
     switch (tabIndex) {
       case 0:
-        return forecast
+        final startOfHour = DateTime(now.year, now.month, now.day, now.hour);
+        final todayData = forecast
             .where(
               (f) =>
-                  f.time.year == today.year &&
-                  f.time.month == today.month &&
-                  f.time.day == today.day,
+              f.time.isAfter(startOfHour.subtract(const Duration(seconds: 1))) && f.time.day == today.day
             )
             .toList();
+        if(todayData.length < 2) {
+          final extra = forecast.where(
+              (f) => f.time.day == tomorrow.day)
+              .take(2- todayData.length)
+              .toList();
+          return[...todayData, ...extra];
+        }
+        return todayData;
       case 1:
         return forecast
             .where(
@@ -81,7 +89,11 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Text(
               'Boishakhi - ',
-              style: Theme.of(context).textTheme.titleMedium,
+              style: GoogleFonts.abhayaLibre(
+                fontSize: 24,
+                color: Theme.of(context).colorScheme.onSurface.withAlpha(180),
+                fontWeight: FontWeight.w700,
+              )
             ),
             Column(
               children: [

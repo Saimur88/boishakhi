@@ -25,6 +25,6 @@
             weatherCode: codes[i] as int,
             rainChances: rain[i] as int,
         );
-      }).where((f) => f.time.isAfter(now)).take(72).toList();
+      }).toList();
     }
   }
