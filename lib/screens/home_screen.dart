@@ -83,6 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         title: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -106,9 +107,62 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8),
-            child: IconButton(
-              onPressed: () {},
-              icon: Image.asset('assets/images/menu.png', width: 20),
+            child: Builder(
+              builder: (context) {
+                return PopupMenuButton(
+                  color: Theme.of(context).colorScheme.surface.withAlpha(240),
+                  onSelected: (value){
+                    if(value == 'Location'){
+                      return _showSearchDialog(context);
+                    }
+                  },
+                  icon: Image.asset('assets/images/menu.png', width: 20),
+                  itemBuilder: (context) => [
+                    const PopupMenuItem(
+                      value: 'Location',
+                      child: Row(
+                        children: [
+                          Icon(Icons.location_on_outlined),
+                          SizedBox(width: 8),
+                          Text('Search Location'),
+                        ],
+                      ),
+
+                    ),
+                    const PopupMenuItem(
+                      child: Row(
+                        children: [
+                          Icon(Icons.contrast_outlined),
+                          SizedBox(width: 8),
+                          Text('Theme'),
+
+                        ],
+                      ),
+
+                    ),
+                    const PopupMenuItem(
+                      child: Row(
+                        children: [
+                          Icon(Icons.settings),
+                          SizedBox(width: 8),
+                          Text('Settings'),
+                        ],
+                      ),
+
+                    ),
+                    const PopupMenuItem(
+                      child: Row(
+                        children: [
+                          Icon(Icons.language_outlined),
+                          SizedBox(width: 8),
+                          Text('Language'),
+                        ],
+                      ),
+
+                    ),
+                  ]
+                );
+              }
             ),
           ),
         ],
